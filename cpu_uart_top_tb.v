@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-`include "cpu_top.v"
+`include "cpu_uart_top.v"
 
 module cpu_top_tb;
 
@@ -14,7 +14,7 @@ wire [31:0] alu_result = 'hz;
 wire [31:0] pc = 'hz;
 
 // Instantiate the DUT
-cpu_top dut (
+cpu_uart_top dut (
     .clk(clk),
     .rst(rst),
     .alu_result(alu_result),
@@ -37,7 +37,7 @@ end
 
 // Test cases
 initial begin
-    $dumpfile("cpu_top_tb.vcd");
+    $dumpfile("cpu_uart_top_tb.vcd");
     $dumpvars(0, cpu_top_tb);
     // Test case 1: Simple ALU operation (add)
     #200000;

@@ -10,8 +10,7 @@ module cpu_top(
     input clk,
     input rst,
     output [31:0] alu_result,
-    output [31:0] pc,
-    input [3:0] x1
+    output [31:0] pc
     );
 
 wire [31:0] instruction = 'hz;
@@ -49,8 +48,7 @@ register_file rf
     .rd1(),
     .rd2(),
     .reg_write(mc.RegWrite),
-    .reg_update(pc != old_pc),
-    .x1(x1)
+    .reg_update(pc != old_pc)
 );
 
 alu ALU
@@ -90,23 +88,6 @@ instruction_fetch instr_fetch
     .branch(ALU.zero && mc.Branch),
     .immediate_address(ig.immOut),
     .instruction(instruction)
-);
-
-/*
-*
-*   Periphirals
-*
-*/
-
-wire rx;
-wire tx;
-
-uart_top uart
-(
-    .clk(clk),
-    .rst(rst),
-    .rx(rx),
-    .tx(tx)
 );
 
 assign pc = instr_fetch.prog_ctr.pc;

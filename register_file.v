@@ -11,8 +11,7 @@ module register_file
    input [0:$clog2(regNum)-1] read_reg_1,   // First register to read
    input [0:$clog2(regNum)-1] read_reg_2,   // Second register to read
    input [0:$clog2(regNum)-1] write_reg,    // Register to write to
-   input [0:regSize-1] write_data,          // The data to write to the register
-   input [3:0] x1,       
+   input [0:regSize-1] write_data,          // The data to write to the register  
    output [0:regSize-1] rd1,                // The output read from read_reg_1
    output [0:regSize-1] rd2,                // The output read from read_reg_2
    input reg_write,                         // Toggle to perform regWrite

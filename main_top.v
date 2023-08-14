@@ -5,7 +5,6 @@
 module main_top (
     input clk,
     input rst,
-    input [3:0] x1,
     output [31:0] x3,
     output clk_out
 );
@@ -22,8 +21,7 @@ cpu_top ct
     .clk(new_clk),
     .rst(rst),
     .alu_result(),
-    .pc(),
-    .x1(x1)
+    .pc()
 );
 
 assign clk_out = new_clk;

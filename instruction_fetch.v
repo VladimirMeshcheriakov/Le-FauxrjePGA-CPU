@@ -8,13 +8,14 @@ module instruction_fetch
     parameter instr_size = 32,                      // The size of each instruction (since we are on RISCV it is locked to 32) 
     parameter pc_incr = 4,                          // The increment in the case of non-branch (+4 (32bits) on RISCV)
     parameter mem_size = 8,                         // The number of blocks of the instruction memory
-    parameter cell_numbers = 32
+    parameter cell_numbers = 256
 )
 (
     input clk,                                      // Global clk
-    input [instr_size-1:0] immediate_address,         // The immediate address tobranch to (Also used for the load)
+    input [instr_size-1:0] immediate_address,       // The immediate address tobranch to (Also used for the load)
     input branch,                                   // Should the PC branch to immediate or +4? (Also used for the load)
     input rst,                                      // Reset the PC to 0
+    input hang_uart,                                // wait for uart to be ready again
     output [instr_size-1:0] instruction             // The instruction read
 );
 
@@ -47,7 +48,7 @@ program_counter prog_ctr
     .clk(clk),
     .immediate_address(immediate_address),
     .branch(branch),
-    .latch(on_),
+    .latch(on_ && ! hang_uart),
     .rst(rst),
     .pc(read_address)
 );
