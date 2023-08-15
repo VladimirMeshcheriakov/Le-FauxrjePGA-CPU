@@ -8,7 +8,7 @@ module instruction_fetch
     parameter instr_size = 32,                      // The size of each instruction (since we are on RISCV it is locked to 32) 
     parameter pc_incr = 4,                          // The increment in the case of non-branch (+4 (32bits) on RISCV)
     parameter mem_size = 8,                         // The number of blocks of the instruction memory
-    parameter cell_numbers = 256
+    parameter cell_numbers = 32576
 )
 (
     input clk,                                      // Global clk

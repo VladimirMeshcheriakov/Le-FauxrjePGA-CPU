@@ -11,7 +11,8 @@ module main_controll(
     output MemWrite,
     output ALUSrc,
     output [2:0] alu_branch,
-    output RegWrite
+    output RegWrite,
+    output auipcEn
     );
 
     wire [1:0] alu_op_internal = 'hz;
@@ -19,6 +20,7 @@ module main_controll(
     cpu_control cc
     (
         .instruction(instruction[6:0]),
+        .auipcEn(auipcEn),
         .Branch(Branch),
         .MemRead(MemRead),
         .MemtoReg(MemtoReg),
