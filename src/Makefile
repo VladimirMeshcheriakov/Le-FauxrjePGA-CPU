@@ -1,5 +1,5 @@
-PROJ := cpu_uart_top_tb
-ASM := code
+PROJ := verilog_sources/main_tb
+ASM := assembly/code
 MEM := mem
 
 ALL: ${PROJ}.v
