@@ -15,13 +15,13 @@ module immediate_generator
     
 always @(instruction or opcode) begin
     case(opcode)
-        // S-Type (first extend the sign, func7 = immed[11:5], rd = immed[4:0]) // R-type goes here too
+        // S-Type (first extend the sign, func7 = immed[11:5], rd = immed[4:0])
         `S_TYPE: 
         begin
             IMM_OUT <= { {21{instruction[31]}}, instruction[30:25], instruction[11:7]};
         end
         // I-type (Extend the sign, funct7+rs2 = immediate)
-        `I_TYPE_LW, `I_TYPE_IMM: begin
+        `I_TYPE_LW, `I_TYPE_IMM, `I_TYPE_JALR: begin
             IMM_OUT <= { {21{instruction[31]}}, instruction[30:20]}; 
         end
         // B-type (Extend the sign, really weird look in the doc)

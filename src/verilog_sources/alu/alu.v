@@ -20,7 +20,8 @@ module alu
     assign result = ALU_Result[alu_operand_size-1:0]; // ALU out
     assign zero = zero_;
 
-always @(op1 or op2 or alu_op) begin
+always @(op1 or op2 or alu_op or branch)
+    begin
     case(alu_op)
         `AND: // AND
             ALU_Result = op1 & op2; 
@@ -36,15 +37,11 @@ always @(op1 or op2 or alu_op) begin
             ALU_Result = op1 >> op2;
         `SUB: // SUB 
             ALU_Result = op1 - op2;
-        `SLLI: //SLLI
-            ALU_Result = op1 << op2[4:0];
-        `SRLI: //SRLI
-            ALU_Result = op1 >> op2[4:0];
         `SLTU: //SLTU
             ALU_Result = op1 < op2;
         `SLT: //SLT
             ALU_Result = op1[alu_operand_size-1] ^ op2[alu_operand_size-1] ? op1[alu_operand_size-1] : op1[alu_operand_size - 2:0] < op2[alu_operand_size - 2:0];
-        default: 
+        default: //ADD
             ALU_Result = op1 + op2;
     endcase
     case(branch)
@@ -62,6 +59,8 @@ always @(op1 or op2 or alu_op) begin
             zero_ <= ALU_Result[alu_operand_size];
         `BGEU: // BGEU
             zero_ <= !ALU_Result[alu_operand_size];
+        default: // If the branch is zzz, so must the zero
+            zero_ <= 1'bz;
     endcase
 end 
 endmodule

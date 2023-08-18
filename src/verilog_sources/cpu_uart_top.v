@@ -62,11 +62,13 @@ register_file rf
     .reg_update(pc != old_pc)
 );
 
+
+
 alu ALU
 (
-    .alu_op(mc.auipcEn ? `ADD : mc.ALU_op),
+    .alu_op(mc.ALU_op),
     .zero(),
-    .op1(mc.auipcEn ? instr_fetch.prog_ctr.pc : rf.rd1),
+    .op1(mc.fetchPC ? mc.fetchPC[0] ? instr_fetch.prog_ctr.pc + 4 : instr_fetch.prog_ctr.pc : rf.rd1),
     .op2(mc.ALUSrc ? ig.immOut : rf.rd2),
     .result(alu_result),
     .branch(mc.alu_branch)
@@ -89,7 +91,7 @@ main_controll mc
     .ALUSrc(),
     .RegWrite(),
     .alu_branch(),
-    .auipcEn()
+    .fetchPC()
 );
 
 // The instruction memory is inside
@@ -98,7 +100,7 @@ instruction_fetch instr_fetch
     .clk(clk),
     .rst(rst),
     .branch(ALU.zero && mc.Branch),
-    .immediate_address(ig.immOut),
+    .immediate_address(ig.immOut), // we have to subtract the current PC otherwise it is not a real branching
     .instruction(instruction),
     .hang_uart(hang_uart)
 );

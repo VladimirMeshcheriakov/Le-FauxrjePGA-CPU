@@ -12,19 +12,19 @@ module main_controll(
     output ALUSrc,
     output [2:0] alu_branch,
     output RegWrite,
-    output auipcEn
+    output [1:0] fetchPC
     );
 
-    wire [1:0] alu_op_internal = 'hz;
+    wire [2:0] alu_ctrl_op = 'hz;
 
     cpu_control cc
     (
         .instruction(instruction[6:0]),
-        .auipcEn(auipcEn),
+        .fetchPC(fetchPC),
         .Branch(Branch),
         .MemRead(MemRead),
         .MemtoReg(MemtoReg),
-        .ALUOp(alu_op_internal),
+        .ALUOp(alu_ctrl_op),
         .MemWrite(MemWrite),
         .ALUSrc(ALUSrc),
         .RegWrite(RegWrite)
@@ -33,7 +33,7 @@ module main_controll(
     alu_control alu_control
     (
         .instruction({instruction[30],instruction[14:12]}),
-        .alu_op(alu_op_internal),
+        .alu_ctrl_op(alu_ctrl_op),
         .alu_op_res(ALU_op),
         .branch(alu_branch)
     );
