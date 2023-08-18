@@ -32,6 +32,9 @@ test: $(addprefix test_,$(INSTRUCTIONS))
 generate:
 	@./tests/generator.sh
 
+template:
+	@./tests/templator.sh
+
 
 clean:
 	@rm -rf ${PROJ}.vvp
