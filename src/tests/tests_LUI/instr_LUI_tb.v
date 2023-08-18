@@ -43,12 +43,23 @@ initial begin
     $dumpfile(`VCD_FILE);
     $dumpvars(0, main_tb);
     // Let the CPU run for the load portion
-    #(`CELL_NUMBERS*2)
+    // Load sequence
+    #5
+    #(`CELL_NUMBERS)
+
     // The instructions are now being executed
     if (dut.rf.reg_write == 1'b0)
     begin
         $fatal(1, "Reg Write not 1");
     end
+    if (dut.rf.write_data != 'hC000)
+    begin
+        $fatal(1, "Write data is not correct!");
+    end
+    if (dut.rf.write_reg != 'h2)
+    begin
+        $fatal(1, "Write reg is wrong!");
+    end 
     $finish;
 end
 
