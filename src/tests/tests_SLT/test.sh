@@ -10,7 +10,7 @@ if [ $? -ne 0 ]; then
     exit 1
 else
     echo -e "${DEFAULT_COLOR}\033[32mTest: ${INSTRUCTION} Succeeded!${DEFAULT_COLOR}"
-    make clean PROJ=tests/tests_${INSTRUCTION}/instr_${INSTRUCTION}_tb ASM=tests/tests_${INSTRUCTION}/instr_${INSTRUCTION}_asm MEM=tests/tests_${INSTRUCTION}/${INSTRUCTION} > /dev/null
+    #make clean PROJ=tests/tests_${INSTRUCTION}/instr_${INSTRUCTION}_tb ASM=tests/tests_${INSTRUCTION}/instr_${INSTRUCTION}_asm MEM=tests/tests_${INSTRUCTION}/${INSTRUCTION} > /dev/null
     exit 0
 fi
 
