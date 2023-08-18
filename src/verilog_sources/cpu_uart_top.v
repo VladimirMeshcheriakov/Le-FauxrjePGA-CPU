@@ -1,11 +1,8 @@
-`timescale 1ns / 1ps
-
 // headers
 `include "verilog_headers/alu_op.vh"
 `include "verilog_headers/uart_registers.vh"
 `include "verilog_headers/imm_gen_op.vh"
 `include "verilog_headers/branch_op.vh"
-`include "verilog_headers/instruction_memory_size.vh"
 // sources
 `include "verilog_sources/alu/alu.v"
 `include "verilog_sources/instruction_fetch/instruction_fetch.v"
@@ -14,6 +11,8 @@
 `include "verilog_sources/main_controll_unit/main_controll.v"
 `include "verilog_sources/uart/uart_top.v"
 `include "verilog_sources/data_mem/data_mem.v"
+
+`timescale 1ns / 1ps
 
 module cpu_uart_top(
     input clk,
@@ -32,6 +31,27 @@ reg [31:0] old_pc;
 *
 */
 
+/*
+*
+*   Periphirals
+*
+*/
+
+wire rx;
+wire tx;
+
+/*
+*
+*   Map the UART registers into memory
+*   Each memory cell is 32 bits, so a lot of memory will be used in vain
+*/
+
+wire [11:0] UBRR;
+wire [3:0] UCSZ;
+wire [1:0] UCR;
+wire [7:0] UDRT;
+wire [1:0] USR;
+wire [7:0] UDRR;
 
 // The data memory
 data_mem data_mem 
@@ -105,27 +125,7 @@ instruction_fetch instr_fetch
     .hang_uart(hang_uart)
 );
 
-/*
-*
-*   Periphirals
-*
-*/
 
-wire rx;
-wire tx;
-
-/*
-*
-*   Map the UART registers into memory
-*   Each memory cell is 32 bits, so a lot of memory will be used in vain
-*/
-
-wire [11:0] UBRR;
-wire [3:0] UCSZ;
-wire [1:0] UCR;
-wire [7:0] UDRT;
-wire [1:0] USR;
-wire [7:0] UDRR;
 
 uart_top uart
 (

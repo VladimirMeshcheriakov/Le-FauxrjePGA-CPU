@@ -1,6 +1,8 @@
-`timescale 1ns / 1ps
 `include "verilog_sources/generic_mem/generic_mem.v"
 `include "verilog_sources/program_counter/program_counter.v"
+
+`timescale 1ns / 1ps
+
 
 module instruction_fetch
 #
@@ -70,7 +72,7 @@ instruction_memory
 always @(posedge clk) begin
     if (rst)
     begin
-        $readmemh("mem.mem", mem);
+        $readmemh(`MEM_FILE, mem);
         we <= 1'b1;
         re <= 1'b0;
         pc_or_load <= 1'b1;

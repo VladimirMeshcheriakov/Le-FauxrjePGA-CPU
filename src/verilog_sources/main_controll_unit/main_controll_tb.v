@@ -1,4 +1,4 @@
-`timescale 1ns / 1ps
+
 `include "main_controll.v"
 
 module main_controll_tb;

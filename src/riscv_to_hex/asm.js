@@ -22,11 +22,15 @@ const inputContent = fs.readFileSync(inputFilePath, "utf-8");
 (async () => {
   try {
     // Launch a headless browser instance
-    const browser = await puppeteer.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      headless: true
-  }); 
-
+    const browser =  await puppeteer.launch({
+      headless: "new",
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-web-security',
+        '--no-deprecation', // Add this flag to suppress deprecation warnings
+      ],
+    });
     // Open a new page
     const page = await browser.newPage();
 
@@ -48,7 +52,6 @@ const inputContent = fs.readFileSync(inputFilePath, "utf-8");
           return;
         }
       });
-      console.log(modifiedData)
     // Close the browser
     await browser.close();
   } catch (error) {

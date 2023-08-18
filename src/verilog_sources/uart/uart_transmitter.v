@@ -67,10 +67,8 @@ always @(posedge baud) begin
         begin
             tx_ <= data_in[offset];
             offset <= offset + 1;
-            $display("calc %x", offset);
             // Untill the char_size bits were transmitted do not change states
             if (offset >= char_size - 1) begin
-            $display("reset %x", offset);
                 state <= STATE_STOP;
             end
         end

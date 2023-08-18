@@ -1,5 +1,6 @@
-`timescale 1ns / 1ps
 `include "verilog_sources/cpu_uart_top.v"
+
+`timescale 1ns / 1ps
 
 module main_tb;
 
@@ -37,10 +38,11 @@ end
 
 // Test cases
 initial begin
-    $dumpfile("main_tb.vcd");
+    $dumpfile(`VCD_FILE);
     $dumpvars(0, main_tb);
     // Let the CPU run for some cycles
     #200000;
+
     $finish;
 end
 

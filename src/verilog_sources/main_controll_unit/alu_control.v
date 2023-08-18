@@ -12,7 +12,6 @@
     - B-Type for branches, always SUB  001
     -  R-Type goes here too (same instructions) 100
 
-
 */
 
 

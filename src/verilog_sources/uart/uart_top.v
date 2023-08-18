@@ -1,7 +1,8 @@
-`timescale 1ns / 1ps
 `include "verilog_sources/uart/uart_transmitter.v"
 `include "verilog_sources/uart/uart_receiver.v"
 `include "verilog_sources/uart/uart_baud.v"
+
+`timescale 1ns / 1ps
 
 module uart_top#(
     parameter CPU_freq = 'd100000000  // 100Mhz for the current FPGA

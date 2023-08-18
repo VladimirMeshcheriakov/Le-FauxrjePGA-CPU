@@ -1,6 +1,7 @@
-`timescale 1ns / 1ps
 `include "verilog_sources/main_controll_unit/cpu_control.v"
 `include "verilog_sources/main_controll_unit/alu_control.v"
+
+`timescale 1ns / 1ps
 
 module main_controll(
     input [31:0] instruction,            // The instruction fed into the ctrl unit
