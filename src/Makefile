@@ -9,7 +9,7 @@ ALL: node project
 
 project: ${PROJ}.v
 	@iverilog -Wall -DMEM_FILE=\"${MEM}.mem\" -DVCD_FILE=\"${PROJ}.vcd\" -DCELL_NUMBERS=$(shell wc -l "${MEM}.mem" | awk '{ print $$1 * 4 }') -o ${PROJ}.vvp  ${PROJ}.v > /dev/null
-	@vvp ${PROJ}.vvp > /dev/null
+	@vvp ${PROJ}.vvp
 
 node: 
 	@echo fetching... 
