@@ -15,7 +15,7 @@ module alu
     output [alu_operand_size - 1:0] result      // The result of the evaluation
 );
     
-    reg [alu_operand_size:0] ALU_Result;
+    reg [alu_operand_size-1:0] ALU_Result;
     reg zero_;
     assign result = ALU_Result[alu_operand_size-1:0]; // ALU out
     assign zero = zero_;
@@ -40,7 +40,7 @@ always @(op1 or op2 or alu_op or branch)
         `SLTU: //SLTU
             ALU_Result = op1 < op2;
         `SLT: //SLT
-            ALU_Result = op1[alu_operand_size-1] ^ op2[alu_operand_size-1] ? op1[alu_operand_size-1] : op1[alu_operand_size - 2:0] < op2[alu_operand_size - 2:0];
+            ALU_Result = (op1[alu_operand_size-1:0] ^ 32'h80000000) < (op2[alu_operand_size-1:0] ^ 32'h80000000);
         default: //ADD
             ALU_Result = op1 + op2;
     endcase
@@ -52,13 +52,13 @@ always @(op1 or op2 or alu_op or branch)
         `JAL: // JAL
             zero_ <= 1;
         `BLT: // BLT
-            zero_ <= !ALU_Result[alu_operand_size];
+            zero_ <= (op1[alu_operand_size-1:0] ^ 32'h80000000) < (op2[alu_operand_size-1:0] ^ 32'h80000000);
         `BLTU: // BLTU
-            zero_ <= ALU_Result[alu_operand_size];
+            zero_ <=  op1 < op2;
         `BGE: // BGE
-            zero_ <= ALU_Result[alu_operand_size];
+            zero_ <= (op1[alu_operand_size-1:0] ^ 32'h80000000) >= (op2[alu_operand_size-1:0] ^ 32'h80000000);
         `BGEU: // BGEU
-            zero_ <= !ALU_Result[alu_operand_size];
+            zero_ <= op1 >= op2;
         default: // If the branch is zzz, so must the zero
             zero_ <= 1'bz;
     endcase
