@@ -2,6 +2,7 @@
 
 `timescale 1ns / 1ps
 
+
 module main_tb;
 
 // Parameters
@@ -40,10 +41,21 @@ end
 initial begin
     $dumpfile(`VCD_FILE);
     $dumpvars(0, main_tb);
-    // Let the CPU run for some cycles
-    #500000;
+    // Let the CPU run for the load portion
+	#5
+    #(`CELL_NUMBERS)
+	#2
+    // The instructions are now being executed
+
+    if (dut.data_mem.ram[1] != 'h00120012)
+	begin
+		$fatal(1, "Write data is not correct!");
+	end
+
 
     $finish;
 end
 
 endmodule
+
+

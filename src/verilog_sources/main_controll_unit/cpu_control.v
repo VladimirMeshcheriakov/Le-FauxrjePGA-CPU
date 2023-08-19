@@ -19,7 +19,7 @@ module cpu_control(
     assign Branch = `B_TYPE == instruction || `J_TYPE_JAL == instruction;
     assign MemRead = `I_TYPE_LW == instruction;
     assign MemWrite = `S_TYPE == instruction;
-    assign ALUOp[2] = `R_TYPE == instruction;
+    assign ALUOp[2] = `R_TYPE == instruction || `S_TYPE == instruction || `I_TYPE_LW == instruction;
     assign ALUOp[1] = `J_TYPE_JAL == instruction || `I_TYPE_IMM == instruction; 
-    assign ALUOp[0] =  `B_TYPE == instruction || `J_TYPE_JAL == instruction;
+    assign ALUOp[0] =  `B_TYPE == instruction || `J_TYPE_JAL == instruction || `S_TYPE == instruction || `I_TYPE_LW == instruction ;
 endmodule

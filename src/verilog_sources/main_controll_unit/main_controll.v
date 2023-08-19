@@ -12,6 +12,7 @@ module main_controll(
     output MemWrite,
     output ALUSrc,
     output [2:0] alu_branch,
+    output [2:0] alu_store,
     output RegWrite,
     output [1:0] fetchPC
     );
@@ -36,7 +37,8 @@ module main_controll(
         .instruction({instruction[30],instruction[14:12]}),
         .alu_ctrl_op(alu_ctrl_op),
         .alu_op_res(ALU_op),
-        .branch(alu_branch)
+        .branch(alu_branch),
+        .store(alu_store)
     );
 
 endmodule

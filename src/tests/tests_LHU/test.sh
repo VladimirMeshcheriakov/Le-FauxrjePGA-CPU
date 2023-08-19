@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DEFAULT_COLOR=$(tput sgr0)
-INSTRUCTION=SW
+INSTRUCTION=LHU
 
 make project --no-print-directory NODE_SCRIPT=riscv_to_hex/asm PROJ=tests/tests_${INSTRUCTION}/instr_${INSTRUCTION}_tb ASM=tests/tests_${INSTRUCTION}/${INSTRUCTION} MEM=tests/tests_${INSTRUCTION}/${INSTRUCTION}
 

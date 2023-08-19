@@ -11,11 +11,11 @@ AUIPC           Yes
 JAL             Yes
 # I-Type
 JALR            No
-LB              No
-LH              No
+LB              Yes
+LH              Yes
 LW              Yes
-LBU             No
-LBH             No
+LBU             Yes
+LHU             Yes
 ADDI            Yes
 SLTI            Yes
 SLTIU           Yes
@@ -30,8 +30,8 @@ BGE             Yes
 BLTU            Yes
 BGEU            Yes
 # S-Type
-SB              No
-SH              No
+SB              Yes
+SH              Yes
 SW              Yes
 # R-Type
 SLLI            Yes

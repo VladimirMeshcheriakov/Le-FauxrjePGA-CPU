@@ -3,6 +3,8 @@
 `include "verilog_headers/uart_registers.vh"
 `include "verilog_headers/imm_gen_op.vh"
 `include "verilog_headers/branch_op.vh"
+`include "verilog_headers/store_op.vh"
+`include "verilog_headers/load_op.vh"
 // sources
 `include "verilog_sources/alu/alu.v"
 `include "verilog_sources/instruction_fetch/instruction_fetch.v"
@@ -64,6 +66,7 @@ data_mem data_mem
     .UDRR(UDRR),
     .addr_bus(ALU.result),
     .data_bus_in(rf.rd2),
+    .store(mc.alu_store),
     .data_bus_out()
 );
 
@@ -111,6 +114,7 @@ main_controll mc
     .ALUSrc(),
     .RegWrite(),
     .alu_branch(),
+    .alu_store(),
     .fetchPC()
 );
 
@@ -120,7 +124,7 @@ instruction_fetch instr_fetch
     .clk(clk),
     .rst(rst),
     .branch(ALU.zero && mc.Branch),
-    .immediate_address(ig.immOut), // we have to subtract the current PC otherwise it is not a real branching
+    .immediate_address(ig.immOut), 
     .instruction(instruction),
     .hang_uart(hang_uart)
 );
