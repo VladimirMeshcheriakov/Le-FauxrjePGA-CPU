@@ -1,18 +1,19 @@
 // headers
+`include "verilog_headers/alu_ctrl.vh"
 `include "verilog_headers/alu_op.vh"
-`include "verilog_headers/uart_registers.vh"
-`include "verilog_headers/imm_gen_op.vh"
 `include "verilog_headers/branch_op.vh"
-`include "verilog_headers/store_op.vh"
+`include "verilog_headers/imm_gen_op.vh"
 `include "verilog_headers/load_op.vh"
+`include "verilog_headers/store_op.vh"
+`include "verilog_headers/uart_registers.vh"
 // sources
 `include "verilog_sources/alu/alu.v"
-`include "verilog_sources/instruction_fetch/instruction_fetch.v"
-`include "verilog_sources/register_file/register_file.v"
-`include "verilog_sources/immediate_generator/immediate_generator.v"
-`include "verilog_sources/main_controll_unit/main_controll.v"
-`include "verilog_sources/uart/uart_top.v"
 `include "verilog_sources/data_mem/data_mem.v"
+`include "verilog_sources/immediate_generator/immediate_generator.v"
+`include "verilog_sources/instruction_fetch/instruction_fetch.v"
+`include "verilog_sources/main_controll_unit/main_controll.v"
+`include "verilog_sources/register_file/register_file.v"
+`include "verilog_sources/uart/uart_top.v"
 
 `timescale 1ns / 1ps
 
@@ -78,7 +79,7 @@ register_file rf
     .read_reg_1(instruction[19:15]),
     .read_reg_2(instruction[24:20]),
     .write_reg(instruction[11:7]),
-    .write_data(mc.MemtoReg ? data_mem.data_bus_out : ALU.result),
+    .write_data(mc.MemtoReg ? data_mem.data_bus_out : instruction[6:0] == `I_TYPE_JALR ? instr_fetch.prog_ctr.pc + 4 : ALU.result),
     .rd1(),
     .rd2(),
     .reg_write(mc.RegWrite),
@@ -124,7 +125,7 @@ instruction_fetch instr_fetch
     .clk(clk),
     .rst(rst),
     .branch(ALU.zero && mc.Branch),
-    .immediate_address(ig.immOut), 
+    .immediate_address(instruction[6:0] == `I_TYPE_JALR ? {alu_result[31:1], 1'b0}:ig.immOut), // In case of a JALR it has to be ig.immOut + rf.rd1 Do not forget to set the least significant bit of the result to zero
     .instruction(instruction),
     .hang_uart(hang_uart)
 );

@@ -1,4 +1,3 @@
-
 `include "verilog_sources/cpu_uart_top.v"
 
 `timescale 1ns / 1ps
@@ -43,23 +42,14 @@ initial begin
     $dumpfile(`VCD_FILE);
     $dumpvars(0, main_tb);
     // Let the CPU run for the load portion
-    #5
+	#5
     #(`CELL_NUMBERS)
     // The instructions are now being executed
-    // Skip the first addi
-    // We are now on AUIPC
-    if (dut.rf.reg_write == 1'b0)
+    if (dut.rf.write_data != -2)
     begin
         $fatal(1, "Reg Write not 1");
     end
-    if (dut.rf.write_data != 'h8008)
-    begin
-        $fatal(1, "Write data is not correct!");
-    end
-    if (dut.rf.write_reg != 'h3)
-    begin
-        $fatal(1, "Write reg is wrong!");
-    end 
+	
     $finish;
 end
 

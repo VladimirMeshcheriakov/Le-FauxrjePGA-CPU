@@ -3,17 +3,6 @@
 
 // This ALU controll is not generic and is made for the RISCV simple processor (not pipelined)
 
-// Here are the types that should be distinguishable in the ALU controll:
-/*
-
-    - U-Type (LUI, AUIPC) always add 000
-    - I-Type (immediate) 010
-    - J-Type (very particular PC manipulation) 011
-    - B-Type for branches, always SUB  001
-    - R-Type goes here too (same instructions) 100
-    - S-Type,I-Type (load)  101
-*/
-
 
 module alu_control(
     input   [3:0] instruction,             // The [30, 14-12] bits of the instruction
@@ -32,27 +21,28 @@ module alu_control(
     always @(instruction or alu_ctrl_op) 
     begin
         case (alu_ctrl_op)
-            3'b100: begin
-                branch_ = 3'bzzz;
-                alu_op_res_ = instruction;                
-            end         
-            3'b011: begin
-                branch_ = `JAL;
-                alu_op_res_ = `ADD;
-            end 
-            3'b010: begin
-                branch_ = 3'bzzz;
-                alu_op_res_ =  {1'b0,instruction[2:0]};                
-            end 
-            3'b001: begin
-                branch_ = instruction[2:0];
-                alu_op_res_ = `SUB;
-            end 
-            3'b000: begin
+            `U_TYPE_CTRL: begin
                 branch_ = 3'bzzz;
                 alu_op_res_ = `ADD;
             end  
-            3'b101: begin   //S-Type
+            `B_TYPE_CTRL: begin
+                branch_ = instruction[2:0];
+                alu_op_res_ = `SUB;
+            end 
+            `I_TYPE_ARITH_CTRL: begin
+                branch_ = 3'bzzz;
+                // This is done so that SRA and SRAI can pass, their funct 3 is distinguished from all artmetic immediate, and their funct7 too
+                alu_op_res_ =  instruction == `SRA ? instruction : {1'b0,instruction[2:0]};                
+            end 
+            `J_TYPE_CTRL, `I_TYPE_JALR_CTRL: begin
+                branch_ = `JAL;
+                alu_op_res_ = `ADD;
+            end 
+            `R_TYPE_CTRL: begin
+                branch_ = 3'bzzz;
+                alu_op_res_ = instruction;                
+            end         
+            `S_TYPE_CTRL, `I_TYPE_LOAD_CTRL: begin
                 branch_ = 3'bzzz;
                 alu_op_res_ = `ADD;
                 store_ = instruction[2:0];

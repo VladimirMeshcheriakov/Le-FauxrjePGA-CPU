@@ -10,7 +10,7 @@ AUIPC           Yes
 # J-Type
 JAL             Yes
 # I-Type
-JALR            No
+JALR            Yes
 LB              Yes
 LH              Yes
 LW              Yes
@@ -36,7 +36,7 @@ SW              Yes
 # R-Type
 SLLI            Yes
 SRLI            Yes
-SRAI            No
+SRAI            Yes
 ADD             Yes
 SUB             Yes
 SLL             Yes
@@ -44,6 +44,6 @@ SLT             Yes
 SLTU            Yes
 XOR             Yes
 SRL             Yes
-SRA             No
+SRA             Yes
 OR              Yes
 AND             Yes

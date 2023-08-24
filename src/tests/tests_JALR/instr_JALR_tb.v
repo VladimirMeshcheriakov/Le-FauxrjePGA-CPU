@@ -45,14 +45,13 @@ initial begin
     // Let the CPU run for the load portion
     #5
     #(`CELL_NUMBERS)
-    // The instructions are now being executed
-    // Skip the first addi
-    // We are now on AUIPC
+
+    // Check the write to the reg with PC+4
     if (dut.rf.reg_write == 1'b0)
     begin
         $fatal(1, "Reg Write not 1");
     end
-    if (dut.rf.write_data != 'h8008)
+    if (dut.rf.write_data != dut.instr_fetch.prog_ctr.pc + 4)
     begin
         $fatal(1, "Write data is not correct!");
     end
@@ -60,6 +59,12 @@ initial begin
     begin
         $fatal(1, "Write reg is wrong!");
     end 
+    //One more tick to check PC
+    #2
+    if (dut.instr_fetch.prog_ctr.pc != 'he)
+    begin
+        $fatal(1, "PC offset is not correct!");
+    end
     $finish;
 end
 

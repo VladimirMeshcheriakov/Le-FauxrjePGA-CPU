@@ -13,13 +13,13 @@ module cpu_control(
     output [1:0] fetchPC // 00 dont fetch pc, 10 fetch pc, 01 fetch pc+4
 );
     assign fetchPC = {`U_TYPE_AUIPC == instruction,`J_TYPE_JAL == instruction};
-    assign ALUSrc = `S_TYPE == instruction || `I_TYPE_LW == instruction || `I_TYPE_IMM == instruction || `U_TYPE_LUI == instruction || `U_TYPE_AUIPC == instruction;
+    assign ALUSrc = `S_TYPE == instruction || `I_TYPE_LW == instruction || `I_TYPE_IMM == instruction || `U_TYPE_LUI == instruction || `U_TYPE_AUIPC == instruction ||  `I_TYPE_JALR == instruction;
     assign MemtoReg = `I_TYPE_LW == instruction;
-    assign RegWrite = `I_TYPE_LW == instruction || `I_TYPE_IMM == instruction || `R_TYPE == instruction || `U_TYPE_LUI == instruction || `U_TYPE_AUIPC == instruction || `J_TYPE_JAL == instruction;
-    assign Branch = `B_TYPE == instruction || `J_TYPE_JAL == instruction;
+    assign RegWrite = `I_TYPE_LW == instruction || `I_TYPE_IMM == instruction || `R_TYPE == instruction || `U_TYPE_LUI == instruction || `U_TYPE_AUIPC == instruction || `J_TYPE_JAL == instruction || `I_TYPE_JALR == instruction;
+    assign Branch = `B_TYPE == instruction || `J_TYPE_JAL == instruction || `I_TYPE_JALR == instruction;
     assign MemRead = `I_TYPE_LW == instruction;
     assign MemWrite = `S_TYPE == instruction;
-    assign ALUOp[2] = `R_TYPE == instruction || `S_TYPE == instruction || `I_TYPE_LW == instruction;
-    assign ALUOp[1] = `J_TYPE_JAL == instruction || `I_TYPE_IMM == instruction; 
+    assign ALUOp[2] = `R_TYPE == instruction || `S_TYPE == instruction || `I_TYPE_LW == instruction || `I_TYPE_JALR == instruction;    
+    assign ALUOp[1] = `J_TYPE_JAL == instruction || `I_TYPE_IMM == instruction || `I_TYPE_JALR == instruction; 
     assign ALUOp[0] =  `B_TYPE == instruction || `J_TYPE_JAL == instruction || `S_TYPE == instruction || `I_TYPE_LW == instruction ;
 endmodule

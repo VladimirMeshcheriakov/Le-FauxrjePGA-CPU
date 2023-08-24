@@ -33,7 +33,7 @@ assign data_bus_out = data_bus_out_;
 
 always @(addr_bus or we or re) begin
     case (store)
-        `LB:
+        `LB: 
             data_bus_out_ = re && !we ? { {24{ram[addr_bus/4][(addr_bus % 4 + 1) * 8 - 1]}} , ram[addr_bus/4][(addr_bus % 4 + 1) * 8 - 1 -:8]}: 'hz;
         `LH: 
             data_bus_out_ = re && !we ? { {16{ram[addr_bus/4][((addr_bus % 4)/2 + 1) * 16 - 1]}} , ram[addr_bus/4][((addr_bus % 4)/2 + 1) * 16 - 1 -:16]}: 'hz;

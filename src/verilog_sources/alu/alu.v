@@ -32,15 +32,17 @@ always @(op1 or op2 or alu_op or branch)
         `XOR: // XOR
             ALU_Result = op1 ^ op2;
         `SLL: // SLL
-            ALU_Result = op1 << op2;
+            ALU_Result = op1 << op2[4:0];
         `SRL: // SRL
-            ALU_Result = op1 >> op2;
+            ALU_Result = op1 >> op2[4:0];
+        `SRA: // SRA
+            ALU_Result = $signed(op1) >>> op2[4:0]; // Lower five bits of op2
         `SUB: // SUB 
             ALU_Result = op1 - op2;
         `SLTU: //SLTU
             ALU_Result = op1 < op2;
         `SLT: //SLT
-            ALU_Result = (op1[alu_operand_size-1:0] ^ 32'h80000000) < (op2[alu_operand_size-1:0] ^ 32'h80000000);
+            ALU_Result = $signed(op1) < $signed(op2);
         default: //ADD
             ALU_Result = op1 + op2;
     endcase
@@ -49,14 +51,14 @@ always @(op1 or op2 or alu_op or branch)
             zero_ <= ALU_Result == 0;
         `BNE: // BNE
             zero_ <= ALU_Result != 0;
-        `JAL: // JAL
+        `JAL, `JALR: // JAL
             zero_ <= 1;
         `BLT: // BLT
-            zero_ <= (op1[alu_operand_size-1:0] ^ 32'h80000000) < (op2[alu_operand_size-1:0] ^ 32'h80000000);
+            zero_ <= $signed(op1) < $signed(op2);//(op1[alu_operand_size-1:0] ^ 32'h80000000) < (op2[alu_operand_size-1:0] ^ 32'h80000000);
         `BLTU: // BLTU
             zero_ <=  op1 < op2;
         `BGE: // BGE
-            zero_ <= (op1[alu_operand_size-1:0] ^ 32'h80000000) >= (op2[alu_operand_size-1:0] ^ 32'h80000000);
+            zero_ <= $signed(op1) >= $signed(op2);//(op1[alu_operand_size-1:0] ^ 32'h80000000) >= (op2[alu_operand_size-1:0] ^ 32'h80000000);
         `BGEU: // BGEU
             zero_ <= op1 >= op2;
         default: // If the branch is zzz, so must the zero

@@ -40,7 +40,7 @@ const inputContent = fs.readFileSync(inputFilePath, "utf-8");
     // Find the textarea element
     const res = await page.evaluate(async (inputContent) => {
       // Call the buildStuff function with the provided input
-      const l = await doAssemble(inputContent);
+      const l = await doAssemble(inputContent, "");
       return l.hex;
     }, inputContent);
 
