@@ -27,6 +27,7 @@ The main aim of this project, was to get familiar with a CPU architecture in gen
 ## Getting Started
 As of the current version, there is no proper build/deployment system for Xilinx IDE to actually test the implementation. So just git cloning the project and compiling with `cd src && make project` will compile the code of src/assembly/code.asm and you will be able to launch gtkWave to verify your results.
 
+
 ## Contributing
 
 Contributions to this project are more than welcome! If you'd like to contribute, please make a PR and we will review it ASAP.

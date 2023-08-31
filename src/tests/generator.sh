@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INSTRUCTIONS=$(grep -oE '^.*Yes$' ../README.md | awk '{print $1}')
+INSTRUCTIONS=$(grep -oE '^.*Yes.*$' tests/instruction_list.txt | awk '{print $1}')
 TEST_DIR_NAME="tests/tests_"
 
 

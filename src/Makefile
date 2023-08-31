@@ -1,19 +1,33 @@
 PROJ ?= verilog_sources/main_tb
 ASM ?= assembly/code
-MEM ?= mem
 NODE_SCRIPT ?= riscv_to_hex/asm
+TOOLCHAIN ?= riscv32-unknown-linux-gnu
 
-INSTRUCTIONS=$(shell grep -oE '^.*Yes$$' ../README.md | awk '{print $$1}')
 
-ALL: node project
+# Broken because of README
+INSTRUCTIONS=$(shell echo tests/tests_* | sed -e "s|tests/tests_||g")
 
-project: ${PROJ}.v
-	@iverilog -Wall -DMEM_FILE=\"${MEM}.mem\" -DVCD_FILE=\"${PROJ}.vcd\" -DCELL_NUMBERS=$(shell wc -l "${MEM}.mem" | awk '{ print $$1 * 4 }') -o ${PROJ}.vvp  ${PROJ}.v > /dev/null
-	@vvp ${PROJ}.vvp
+ALL:  project
 
-node: 
-	@echo fetching... 
-	@node.exe --no-deprecation ./${NODE_SCRIPT}.js ./${ASM}.asm ./${MEM}.mem
+project: ${PROJ}.v ${ASM}.mem
+	@iverilog -Wall -DMEM_FILE=\"${ASM}.mem\" -DVCD_FILE=\"${PROJ}.vcd\" -DCELL_NUMBERS=$(shell wc -l "${ASM}.mem" | awk '{ print $$1 * 4 }') -o ${PROJ}.vvp  ${PROJ}.v > /dev/null 
+	@vvp ${PROJ}.vvp >/dev/null
+
+
+%.mem: %.asm
+ifeq ($(USE_NODE),)
+	@echo using toolchain
+	@${TOOLCHAIN}-as -o $*.o $<
+	@${TOOLCHAIN}-ld -o $*.elf $*.o
+	@${TOOLCHAIN}-objcopy -O binary --reverse-bytes=4 -j *.text $*.elf $*.bin
+	@hexdump $*.bin -e '4/1 "%0.2x " "\n"' > $*.mem
+	@rm $*.o $*.elf $*.bin
+else
+	@echo using node
+	@node.exe --no-deprecation ./${NODE_SCRIPT}.js ./$< ./$@
+endif
+
+
 
 # Define a rule for each instruction
 $(foreach INSTRUCTION,$(INSTRUCTIONS),$(eval \
@@ -22,9 +36,7 @@ $(foreach INSTRUCTION,$(INSTRUCTIONS),$(eval \
 ))
 
 
-%.mem: %.asm
-	@echo fetching test...
-	@node.exe --no-deprecation ./${NODE_SCRIPT}.js ./$< ./$@
+
 
 
 test: $(addprefix test_,$(INSTRUCTIONS))
@@ -39,6 +51,7 @@ template:
 clean:
 	@rm -rf ${PROJ}.vvp
 	@rm -rf ${PROJ}.vcd
+	@rm -rf ${ASM}.mem
 
 
 .PHONY: clean

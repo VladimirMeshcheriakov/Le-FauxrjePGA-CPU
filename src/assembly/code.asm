@@ -20,4 +20,7 @@ mul_loop:
 end_mul:
     addi x5,x3, 0
     bne x4,x6,main_loop
-end_main_loop:
+end_fact:
+    xor x1, x1, x1
+    sw x5, 0(x1)
+    lw x7, 0(x1)

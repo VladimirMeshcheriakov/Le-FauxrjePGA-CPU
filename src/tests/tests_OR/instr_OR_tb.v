@@ -54,7 +54,7 @@ initial begin
 	begin
 		$fatal(1, "Write data is not correct!");
 	end
-	if (dut.rf.write_reg != 'h3)
+	if (dut.rf.write_reg != 'h4)
 	begin
 		$fatal(1, "Write reg is wrong!");
 	end 
